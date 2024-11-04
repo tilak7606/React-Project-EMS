@@ -1,5 +1,5 @@
 
-const employees = [
+ export const employees = [
     {
         "id": 1,
         "firstName": "Amit",
@@ -214,7 +214,7 @@ const employees = [
 
 
 
-    const admin = [ {
+   export const admin = [ {
       "firstName":"Tilak",
       "id": 101,
       "email": "Tilak@123.com",
@@ -223,9 +223,11 @@ const employees = [
 ]
   
 
-
 // set karne ke lia
+// localStorage.clear()
 
+// localStorage.setItem("employees" ,JSON.stringify(employees))
+// localStorage.setItem("admin" ,JSON.stringify(admin))
 
 
 export const setLocalStorage = () => {
@@ -239,7 +241,10 @@ export const getLocalStorage = () => {
     const admin = JSON.parse(localStorage.getItem('admin'))
 
     return {employees,admin}
-
-
     
 }
+
+
+
+
+// export default {employees,admin}

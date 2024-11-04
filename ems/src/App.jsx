@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import Login from './components/Auth/Login'
 import EmployeeDashboard from './components/Dashboard/EmployeeDashboard'
 import AdminDashboard from './components/Dashboard/AdminDashboard'
-import { getLocalStorage, setLocalStorage } from './utils/localStorage'
+// import { getLocalStorage, setLocalStorage } from './utils/localStorage'
 import { AuthContext } from './context/AuthProvider'
 
 export default function App() {
@@ -12,9 +12,6 @@ export default function App() {
 
   const [user, setUser] = useState(null);
   const [loggedinUserData,setLoggedInUserData] = useState(null)
-  
-  const [userName,setUserName] = useState('user')
-  const [adminName,setAdminName] = useState('admin')
 
 
 
@@ -25,6 +22,7 @@ export default function App() {
     if(loggedInUser){
     const userData = JSON.parse(loggedInUser)
     setUser(userData.role)
+    // console.log(object)
     setLoggedInUserData(userData.data)
     
     }          
@@ -49,22 +47,15 @@ export default function App() {
 
 
   const handelLogin = (email,password) => {
-    if(email == "Tilak@123.com" && password == '123'){
-      localStorage.setItem('loggedInUser',JSON.stringify({role:'admin'}))
-      setUser('admin');
-
+ 
       const admin = adminData.find((e) => email == e.email && password == e.password )
+      if(admin){
+      localStorage.setItem('loggedInUser',JSON.stringify({role:'admin' , data:admin}))
+      setLoggedInUserData(admin)
 
-      console.log(admin)
+      setUser('admin');
+      }
 
-      // setAdminName(admin.firstName)
-
-      // console.log(adminName)         
-    
-      // const data = JSON.parse(loggedInUser);
-      // console.log(data.data.firstName)
-      
-    }
 
     else if(userData){           
       const employee = userData.find((e) => email == e.email && password == e.password) 
@@ -72,7 +63,7 @@ export default function App() {
    
 
       if(employee){
-        setUserName(employee.firstName)
+        
         setUser('employee');      
         localStorage.setItem('loggedInUser',JSON.stringify({role:'employee',data:employee}))
         setLoggedInUserData(employee)
@@ -91,9 +82,10 @@ export default function App() {
   }
 
 
-//   useEffect(() => {
-//     console.log(adminName)
-//  },[])
+  useEffect(() => {
+    if(loggedinUserData)
+   console.log(loggedinUserData.firstName)
+ },[loggedinUserData])
 
 
 
@@ -104,7 +96,7 @@ export default function App() {
    <>
 
    { !user ?  <Login handelLogin={handelLogin} /> : ''}
-   {user == 'admin' ? <AdminDashboard changeUser={setUser} userName={adminName} /> :(user == 'employee' ? <EmployeeDashboard changeUser={setUser} userName={userName} data={loggedinUserData} /> : null ) }
+   {user == 'admin' ? <AdminDashboard changeUser={setUser} userName={ !loggedinUserData ? 'admin' : loggedinUserData.firstName } /> :(user == 'employee' ? <EmployeeDashboard changeUser={setUser} userName={ !loggedinUserData ? 'admin' : loggedinUserData.firstName } data={loggedinUserData} /> : null ) }
      
      {/* <EmployeeDashboard/> */}
      {/* <AdminDashboard/> */}
